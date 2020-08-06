@@ -1,0 +1,24 @@
+clc
+clear
+close all
+
+%[y,fs]=audioread('tablamusic.wav');                %For Tabla
+[y,fs]=audioread('drummusic.wav');                  %For Drum
+
+t=[0:length(y)-1]/fs;
+a=fft(y);
+ms1=fs/1000;
+ms20=fs/20;
+Y=fft(y.*hamming(length(y)));
+C=fft(log(abs(y)+eps));
+q=(ms1:ms20)/fs;
+[Max_Amp_at_Pitch,fx]=max(abs(C(ms1:ms20)));
+freq_pitch=fs/(ms1+fx-1);                          %Finding Freq
+
+if(freq_pitch>920)
+    fprintf('Instrument is Drum')
+else
+    fprintf('Instrument is Tabla')
+end
+
+sound(y,fs)
